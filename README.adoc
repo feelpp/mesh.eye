@@ -22,3 +22,17 @@ To be utilized with Feel++, the mesh must be converted to the Gmsh format with t
 ----
 gmsh -0 Eye_Mesh3D.med -o Eye_Mesh3D.msh
 ----
+
+
+
+
+## Generate the uniform family mesh `M`
+
+To generate the uniform family mesh `M`, run the following command:
+
+[source, bash]
+----
+python3 generate_familly_M.py
+----
+
+It will generate the meshes `M0`, `M1`, `M2`, `M3`, `M4` and `M5` of various refinement levels.

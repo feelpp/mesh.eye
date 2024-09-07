@@ -1,0 +1,30 @@
+{
+    "Name": "test_mesh",
+    "Meshes":
+    {
+        "heat":
+        {
+            "Import":
+            {
+                "filename":"$cfgdir/../M/M2/Eye_Mesh3D.json",
+                "partition": 0
+            }
+        }
+    },
+    "Models":
+    {
+        "heat": {"name": "heat"}
+    },
+    "Materials":
+    {
+        "Cornea": {"k": 0.58},
+        "Sclera": {"k": 1.0042},
+        "AqueousHumor": {"k": 0.578},
+        "Lens": {"k": 0.40},
+        "Iris": {"k": 1.0042},
+        "Lamina": {"k": 1.0042},
+        "Choroid": {"k": 0.52},
+        "OpticNerve": {"k": 1.0042}
+    }
+
+}
