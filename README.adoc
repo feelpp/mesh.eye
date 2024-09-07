@@ -1,0 +1,24 @@
+# Generation of the geometry and the meshes of the 3D model of the human eyeball
+
+## Generate the geometry and the initial mesh
+
+Generate the geometry of the human eyeball with the following command:
+
+[source, bash]
+----
+salome [-t] construct-eye.py [--geometrical_args...]
+----
+
+And generate the meshes with the following command:
+
+[source, bash]
+----
+salome [-t] eye.py
+----
+
+To be utilized with Feel++, the mesh must be converted to the Gmsh format with the following command:
+
+[source, bash]
+----
+gmsh -0 Eye_Mesh3D.med -o Eye_Mesh3D.msh
+----
