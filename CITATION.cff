@@ -1,0 +1,36 @@
+cff-version: 1.2.0
+message: "If you use this dataset, please cite it as below."
+authors:
+  - family-names: "Saigre"
+    given-names: "Thomas"
+    orcid:  https://orcid.org/0009-0009-5763-4956
+  - family-names: "Prud'homme"
+    given-names: "Christophe"
+    orcid: https://orcid.org/0000-0003-2287-2961
+  - family-names: "Szopos"
+    given-names: "Marcela"
+    orcid: https://orcid.org/0000-0002-7300-3267
+title: "TODO"
+version: 1.0.0
+identifiers:
+  - type: doi
+    value:
+date-released: 2024-09-06
+url: "https://github.com/feelpp/mesh.eye"
+preferred-citation:
+  type: article
+  authors:
+  - family-names: "Saigre"
+    given-names: "Thomas"
+    orcid:  https://orcid.org/0009-0009-5763-4956
+  - family-names: "Prud'homme"
+    given-names: "Christophe"
+    orcid: https://orcid.org/0000-0003-2287-2961
+  - family-names: "Szopos"
+    given-names: "Marcela"
+    orcid:  https://orcid.org/0000-0002-7300-3267
+  doi: 10.1002/cnm.3864
+  journal: "TODO"
+  title: "TODO"
+  year: 2024
+  month: 9
