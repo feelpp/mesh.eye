@@ -36,3 +36,11 @@ python3 generate_familly_M.py
 ----
 
 It will generate the meshes `M0`, `M1`, `M2`, `M3`, `M4` and `M5` of various refinement levels.
+
+To east the usage of the meshed in parallel with Feel++, the meshes need to be partitionned.
+This can be performed with the following command:
+
+[source, bash]
+----
+./partition_mesh_M.sh
+----

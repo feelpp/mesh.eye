@@ -3,5 +3,5 @@ Eye.step
 *.med
 *.msh
 *.h5
-**/Eye_Mesh3D.json
+**/Eye_Mesh3D*.json
 **/feelppdb/**
