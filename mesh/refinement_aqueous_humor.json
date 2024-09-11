@@ -1,0 +1,130 @@
+{
+    "Name": "Remesh aroung aqueous humor",
+    "ShortName":"RemeshAH",
+    "Models":
+    {
+        "heat": {"name": "eye-heat"}
+    },
+
+    "Parameters": {
+        "hfar": "h:h",
+        "hclose": "hfar/3:hfar",
+        "d2r_wall": "min(meshes_heatfluid_distanceToRange_wall_normalized_min_max, 0.2) / 0.2:meshes_heatfluid_distanceToRange_wall_normalized_min_max",
+        "mymetric_wall": "hclose+(hfar-hclose)*d2r_wall:hclose:hfar:d2r_wall"
+    },
+    "Meshes": {
+        "heat": {
+            "DistanceToRange": {
+                "wall": {
+                    "markers": ["AqueousHumor_Lens", "AqueousHumor_Cornea", "AqueousHumor_Iris"],
+                    "normalization": "min_max"
+                }
+            },
+            "MeshAdaptation": [{
+                "metric": "mymetric_wall:mymetric_wall",
+                "events": {"after_import": {}}
+            }],
+            "Import": {
+                "filename": "$cfgdir/Eye_Mesh3D.msh",
+                "partition": 1
+            }
+        }
+    },
+
+
+
+    "Materials":
+    {
+        "Cornea":
+        {
+            "k":"0.58", // [W / (m * K)]
+            "rho":"rho_Cornea:rho_Cornea", // [kg / m^3]
+            "Cp":"4178" // [J / (kg * K)]
+        },
+        "Sclera":
+        {
+            "k": "1.0042", // [W / (m * K)]
+            "rho": "1050", // [kg / m^3]
+            "Cp": "3180" // [J / (kg * K)]
+        },
+        "AqueousHumor":
+        {
+            "k":"0.578", // [W / (m * K)]
+            "rho":"1000", // [kg / m^3]
+            "Cp":"4178", // [J / (kg * K)]
+            "mu":"mu_AH:mu_AH", // [N s / m^2]
+            "beta":"beta_AH:beta_AH" // [1 / K]
+        },
+        "Lens":
+        {
+            "k":"k_lens:k_lens", // [W / (m * K)]
+            "rho":"rho_Lens:rho_Lens", // [kg / m^3]
+            "Cp":"3000" // [J / (kg * K)]
+        },
+        "VitreousHumor":
+        {
+            "k":"0.603", // [W / (m * K)]
+            "rho":"1100", // [kg / m^3]
+            "Cp":"4178" //[J / (kg * K)]
+        },
+        "Iris":
+        {
+            "k":"1.0042", // [W / (m * K)]
+            "rho":"1050", // [kg / m^3]
+            "Cp":"3180" // [J / (kg * K)]
+        },
+        "Lamina":
+        {
+            "k":"1.0042", // [W / (m * K)]
+            "rho":"1050", // [kg / m^3]
+            "Cp":"3180" // [J / (kg * K)]
+        },
+        "Choroid":
+        {
+            "k":"0.52", // [W / (m * K)]
+            "rho":"1050", // [kg / m^3]
+            "Cp":"3180" // [J / (kg * K)]
+        },
+        "Retina":
+        {
+            "k":"0.52", // [W / (m * K)]
+            "rho":"1050", // [kg / m^3]
+            "Cp":"3180" // [J / (kg * K)]
+        },
+        "OpticNerve":
+        {
+            "k":"1.0042", // [W / (m * K)]
+            "rho":"1050", // [kg / m^3]
+            "Cp":"3180" // [J / (kg * K)]
+        }
+    },
+
+    "BoundaryConditions":
+    {
+        "heat":
+        {
+            "convective_heat_flux":
+            {
+                "BC_Sclera":
+                {
+                    "h":"h_bl:h_bl",
+                    "Text":"T_bl:T_bl"
+                },
+                "BC_OpticNerve":
+                {
+                    "h":"h_bl:h_bl",
+                    "Text":"T_bl:T_bl"
+                },
+                "BC_Cornea":
+                {
+                    "h": "h_amb+h_tau:h_amb:h_tau",
+                    "Text": "T_amb:T_amb"
+                }
+            },
+            "flux":
+            {
+                "BC_Cornea": {"expr":"-E:E"}
+            }
+        }
+    }
+}

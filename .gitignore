@@ -5,3 +5,4 @@ Eye.step
 *.h5
 **/Eye_Mesh3D*.json
 **/feelppdb/**
+*.log
