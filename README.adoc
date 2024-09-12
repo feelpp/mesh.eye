@@ -82,7 +82,7 @@ To partition the adapted family mesh `Mr.`, run the following command:
 ./partition_mesh_Mr.sh
 ----
 
-NOTE: With this partitionnement, the parts where the physics are considered are split: namely the `AqueousHumor` on the one hand where the coupled model is considered, and the remaining regions on the other hand, where the sole heat transfer is considered, see [] for more details.
+NOTE: With this partitionnement, the parts where the physics are considered are split: namely the `AqueousHumor` on the one hand where the coupled model is considered, and the remaining regions on the other hand, where the sole heat transfer is considered, see <<C>> for more details.
 
 
 [bibliography]
