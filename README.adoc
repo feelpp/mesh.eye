@@ -73,8 +73,21 @@ python3 generate_familly.py Mr
 ----
 
 
+== Partition the adapted family mesh `Mr.`
+
+To partition the adapted family mesh `Mr.`, run the following command:
+
+[source, bash]
+----
+./partition_mesh_Mr.sh
+----
+
+NOTE: With this partitionnement, the parts where the physics are considered are split: namely the `AqueousHumor` on the one hand where the coupled model is considered, and the remaining regions on the other hand, where the sole heat transfer is considered, see [] for more details.
+
+
 [bibliography]
 == Bibliography
 
-* [[S]] Ribes, Alejandro & Bruneton, Adrien & Geay, Anthony. (2017). SALOME: an Open-Source simulation platform integrating ParaView. 10.13140/RG.2.2.12107.08485.
-* [[F]] Prud'homme, Christophe, Vincent Chabannes, Thomas Saigre, Christophe Trophime, Luca Berti, Abdoulaye Samaké, Céline Van Landeghem, et al. « Feelpp/feelpp: Feel++ Release V111 Preview.10 ». Zenodo, 15 juillet 2024. https://doi.org/10.5281/zenodo.12742155.
+* [[S]] Alejandro Ribes, Adrien Bruneton, Anthony Geay. SALOME: an Open-Source simulation platform integrating ParaView. (2017) 10.13140/RG.2.2.12107.08485.
+* [[F]] Christophe Prud'homme, Vincent Chabannes, Thomas Saigre, Christophe Trophime, Luca Berti, Abdoulaye Samaké, Céline Van Landeghem, et al. « Feelpp/feelpp: Feel++ Release V111 Preview.10 ». Zenodo, 15 juillet 2024. https://doi.org/10.5281/zenodo.12742155.
+* [[C]] Thomas Saigre, Vincent Chabannes, Christophe Prud'homme, Marcela Szopos. A coupled model of heat transfer and fluid flow in the human eye. (2024). _In preparation_.

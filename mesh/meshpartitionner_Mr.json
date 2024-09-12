@@ -1,0 +1,10 @@
+{
+    "visualization-exporter":{
+        "enabled":true
+    },
+    "partitioner":
+    {
+        "number-of-partition":[1, 64, 128, 256, 384, 512, 640, 768],
+        "splitting":[ "AqueousHumor", ["Cornea", "Sclera", "AqueousHumor", "Lens", "VitreousHumor", "Iris", "Lamina", "Choroid", "Retina", "OpticNerve"] ]
+    }
+}
