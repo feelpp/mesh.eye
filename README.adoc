@@ -88,6 +88,6 @@ NOTE: With this partitionnement, the parts where the physics are considered are 
 [bibliography]
 == Bibliography
 
-* [[S]] Alejandro Ribes, Adrien Bruneton, Anthony Geay. SALOME: an Open-Source simulation platform integrating ParaView. (2017) 10.13140/RG.2.2.12107.08485.
+* [[S]] Alejandro Ribes, Adrien Bruneton, Anthony Geay. SALOME: an Open-Source simulation platform integrating ParaView. (2017) https://doi.org/10.13140/RG.2.2.12107.08485.
 * [[F]] Christophe Prud'homme, Vincent Chabannes, Thomas Saigre, Christophe Trophime, Luca Berti, Abdoulaye Samaké, Céline Van Landeghem, et al. « Feelpp/feelpp: Feel++ Release V111 Preview.10 ». Zenodo, 15 juillet 2024. https://doi.org/10.5281/zenodo.12742155.
 * [[C]] Thomas Saigre, Vincent Chabannes, Christophe Prud'homme, Marcela Szopos. A coupled model of heat transfer and fluid flow in the human eye. (2024). _In preparation_.
