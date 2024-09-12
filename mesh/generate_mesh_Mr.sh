@@ -9,5 +9,7 @@ mpirun -np ${NP} feelpp_toolbox_heat --config-file refinement_aqueous_humor.cfg 
 
 # The adapted mesh is saved in the folder ${PWD}/feelppdb/mesh/meshes/tmp
 # we retreive this mesh and save it in the current folder
-mv ${PWD}/feelppdb/mesh/np_${NP}/meshes/tmp mesh_o.h5 ${PWD}/Eye_Mesh3D_r.h5
-mv ${PWD}/feelppdb/mesh/np_${NP}/meshes/tmp mesh_o.json ${PWD}/Eye_Mesh3D_r.json
+mv ${PWD}/feelppdb/mesh/np_${NP}/meshes/tmp/mesh_o.h5 ${PWD}/Eye_Mesh3D_r.h5
+mv ${PWD}/feelppdb/mesh/np_${NP}/meshes/tmp/mesh_o.json ${PWD}/Eye_Mesh3D_r.json
+
+sed -i 's/mesh_o/Eye_Mesh3D_r/g' Eye_Mesh3D_r.json
