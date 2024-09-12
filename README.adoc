@@ -3,8 +3,8 @@
 This document describes the procedure to generate the geometry and the meshes of the 3D model of the human eyeball.
 To generate the geometry and the meshes, the following tools are needed:
 
-- Salome <<1>> (v9.12.0) https://www.salome-platform.org/
-- Feel++ <<2>> (0.111.0) https://docs.feelpp.org/home/index.html
+- Salome <<S>> (v9.12.0) https://www.salome-platform.org/
+- Feel++ <<F>> (0.111.0) https://docs.feelpp.org/home/index.html
 
 == Generate the geometry and the initial mesh
 
@@ -76,5 +76,5 @@ python3 generate_familly.py Mr
 [bibliography]
 == Bibliography
 
-* [[1]] Ribes, Alejandro & Bruneton, Adrien & Geay, Anthony. (2017). SALOME: an Open-Source simulation platform integrating ParaView. 10.13140/RG.2.2.12107.08485.
-* [[2]] Prud'homme, Christophe, Vincent Chabannes, Thomas Saigre, Christophe Trophime, Luca Berti, Abdoulaye Samaké, Céline Van Landeghem, et al. « Feelpp/feelpp: Feel++ Release V111 Preview.10 ». Zenodo, 15 juillet 2024. https://doi.org/10.5281/zenodo.12742155.
+* [[S]] Ribes, Alejandro & Bruneton, Adrien & Geay, Anthony. (2017). SALOME: an Open-Source simulation platform integrating ParaView. 10.13140/RG.2.2.12107.08485.
+* [[F]] Prud'homme, Christophe, Vincent Chabannes, Thomas Saigre, Christophe Trophime, Luca Berti, Abdoulaye Samaké, Céline Van Landeghem, et al. « Feelpp/feelpp: Feel++ Release V111 Preview.10 ». Zenodo, 15 juillet 2024. https://doi.org/10.5281/zenodo.12742155.
