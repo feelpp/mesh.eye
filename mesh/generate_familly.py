@@ -17,7 +17,7 @@ if __name__ == "__main__":
     cwd = os.getcwd()
 
     # sys.argv.append("--mesh.scale=1e-3")
-    e = fppc.Environment(sys.argv, config=fppc.localRepository("remesh"))
+    e = fppc.Environment(["remesh"], config=fppc.localRepository("remesh"))
 
     if "Mr" in sys.argv:
         mesh_path = os.path.join(cwd, "Eye_Mesh3D_r.json")
@@ -38,7 +38,7 @@ if __name__ == "__main__":
             print(f"ReMesh {mesh_r.hMin():e}, {mesh_r.hAverage():e}, {mesh_r.hMax():e}")
             print(f"       {mesh_r.numGlobalElements()} elements")
 
-        export_dir = os.path.join(cwd, "0", mesh_family, f"mesh_family{idx}")
+        export_dir = os.path.join(cwd, mesh_family, f"M{idx}")
         if fppc.Environment.isMasterRank() and not os.path.exists(export_dir):
             os.makedirs(export_dir)
         mesh_r.saveHDF5(os.path.join(export_dir, "Eye_Mesh3D.json"))
