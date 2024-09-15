@@ -17,20 +17,28 @@ if __name__ == "__main__":
     cwd = os.getcwd()
 
     # sys.argv.append("--mesh.scale=1e-3")
-    e = fppc.Environment(sys.argv, config=fppc.localRepository("remesh"))
+    e = fppc.Environment(["remesh"], config=fppc.localRepository("remesh"))
 
-    mesh = load_mesh("Eye_Mesh3D.msh", dim=3)
+    if "Mr" in sys.argv:
+        mesh_path = os.path.join(cwd, "Eye_Mesh3D_r.json")
+        mesh_family = "Mr"
+    else:
+        mesh_path = os.path.join(cwd, "Eye_Mesh3D.msh")
+        mesh_family = "M"
 
-    for idx, r in enumerate(["10", "5", "1", "0.5", "0.25", "0.125"]):
+    mesh = load_mesh(mesh_path, dim=3)
+
+    for idx, r in enumerate(["10", "5"]):#, "1", "0.5", "0.25", "0.125"]):
         mesh_r = remesh(mesh, r)
 
         if fppc.Environment.isMasterRank():
-            print(Fore.BLUE, f"M{idx} with metric {r}", Style.RESET_ALL)
+            print(Fore.BLUE, f"{mesh_family}{idx} with metric {r}", Style.RESET_ALL)
             print(f"       hMin          hAverage      hMax")
             print(f"  Mesh {mesh.hMin():e}, {mesh.hAverage():e}, {mesh.hMax():e}")
             print(f"ReMesh {mesh_r.hMin():e}, {mesh_r.hAverage():e}, {mesh_r.hMax():e}")
+            print(f"       {mesh_r.numGlobalElements()} elements")
 
-        export_dir = os.path.join(cwd, "M", f"M{idx}")
+        export_dir = os.path.join(cwd, mesh_family, f"M{idx}")
         if fppc.Environment.isMasterRank() and not os.path.exists(export_dir):
             os.makedirs(export_dir)
         mesh_r.saveHDF5(os.path.join(export_dir, "Eye_Mesh3D.json"))
