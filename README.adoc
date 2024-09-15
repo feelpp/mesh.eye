@@ -6,7 +6,7 @@ Generate the geometry of the human eyeball with the following command:
 
 [source, bash]
 ----
-salome [-t] construct-eye.py [--geometrical_args...]
+salome [-t] construct-eye-STP.py [--geometrical_args...]
 ----
 
 And generate the meshes with the following command:
