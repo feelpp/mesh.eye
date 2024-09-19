@@ -4,8 +4,8 @@
 This document describes the procedure to generate the geometry and the meshes of the 3D model of the human eyeball.
 To generate the geometry and the meshes, the following tools are needed:
 
-- Salome <<Ribes17>> (v9.12.0) https://www.salome-platform.org/
-- Feel++ <<Prudhomme24>> (0.111.0) https://docs.feelpp.org/home/index.html
+- Salome <<Ribes17>> (v9.12.0) https://www.salome-platform.org/,
+- Feel++ <<Prudhomme24>> (0.111.0) https://docs.feelpp.org/home/index.html.
 
 == Generate the geometry and the initial mesh
 
@@ -16,7 +16,7 @@ Generate the geometry of the human eyeball with the following command:
 salome [-t] construct-eye-STP.py [--geometrical_args...]
 ----
 
-More details on the gemetrical arguments can be found in <<Sala24>>
+More details on the gemetrical arguments can be found in <<Sala24>>.
 
 And generate the meshes with the following command:
 
@@ -86,6 +86,21 @@ To partition the adapted family mesh `Mr.`, run the following command:
 ----
 
 NOTE: With this partitionnement, the parts where the physics are considered are split: namely the `AqueousHumor` on the one hand where the coupled model is considered, and the remaining regions on the other hand, where the sole heat transfer is considered, see <<Saigre24>> for more details.
+
+
+
+== Mesh description
+
+.3D geometry of the human eyeball.
+image::doc/eye.svg[]
+
+The markers of all the meshes are identical.
+
+* The volume markers are: `"Cornea"`, `"Sclera"`, `"AqueousHumor"`, `"Lens"`, `"VitreousHumor"`, `"Iris"`, `"Lamina"`, `"Choroid"`, `"Retina"`, `"OpticNerve"`.
+* The interfaces markers are defined when two volumes are in contact, and follow the convention `"Volume1_Volume2"`, where `"Volume1"` and `"Volume2"` are in lexicographic order. For example, the interface between the `"Cornea"` and the `"AqueousHumor"` is `"AqueousHumor_Cornea"`.
+* The external surfaces are: `"BC_Cornea"`, `"BC_Sclera"` and "`BC_OpticNerve`".
+
+
 
 
 [bibliography]
