@@ -98,6 +98,7 @@ The markers of all the meshes are identical.
 
 * The volume markers are: `"Cornea"`, `"Sclera"`, `"AqueousHumor"`, `"Lens"`, `"VitreousHumor"`, `"Iris"`, `"Lamina"`, `"Choroid"`, `"Retina"`, `"OpticNerve"`.
 * The interfaces markers are defined when two volumes are in contact, and follow the convention `"Volume1_Volume2"`, where `"Volume1"` and `"Volume2"` are in lexicographic order. For example, the interface between the `"Cornea"` and the `"AqueousHumor"` is `"AqueousHumor_Cornea"`.
+* The is one exception to the previous rule: the boudary surfaces around the lamina crobrosa are names `"Lamina_In"`, `"Lamina_Out"`, `Lamina_Lateral"` and `"Lamina_Hole"`.
 * The external surfaces are: `"BC_Cornea"`, `"BC_Sclera"` and "`BC_OpticNerve`".
 
 
