@@ -1,10 +1,11 @@
 = Generation of the geometry and the meshes of the 3D model of the human eyeball
+:hide-uri-scheme:
 
 This document describes the procedure to generate the geometry and the meshes of the 3D model of the human eyeball.
 To generate the geometry and the meshes, the following tools are needed:
 
-- Salome <<S>> (v9.12.0) https://www.salome-platform.org/
-- Feel++ <<F>> (0.111.0) https://docs.feelpp.org/home/index.html
+- Salome <<Ribes17>> (v9.12.0) https://www.salome-platform.org/
+- Feel++ <<Prudhomme24>> (0.111.0) https://docs.feelpp.org/home/index.html
 
 == Generate the geometry and the initial mesh
 
@@ -14,6 +15,8 @@ Generate the geometry of the human eyeball with the following command:
 ----
 salome [-t] construct-eye-STP.py [--geometrical_args...]
 ----
+
+More details on the gemetrical arguments can be found in <<Sala24>>
 
 And generate the meshes with the following command:
 
@@ -82,12 +85,13 @@ To partition the adapted family mesh `Mr.`, run the following command:
 ./partition_mesh_Mr.sh
 ----
 
-NOTE: With this partitionnement, the parts where the physics are considered are split: namely the `AqueousHumor` on the one hand where the coupled model is considered, and the remaining regions on the other hand, where the sole heat transfer is considered, see <<C>> for more details.
+NOTE: With this partitionnement, the parts where the physics are considered are split: namely the `AqueousHumor` on the one hand where the coupled model is considered, and the remaining regions on the other hand, where the sole heat transfer is considered, see <<Saigre24>> for more details.
 
 
 [bibliography]
 == Bibliography
 
-* [[S]] Alejandro Ribes, Adrien Bruneton, Anthony Geay. SALOME: an Open-Source simulation platform integrating ParaView. (2017) https://doi.org/10.13140/RG.2.2.12107.08485.
-* [[F]] Christophe Prud'homme, Vincent Chabannes, Thomas Saigre, Christophe Trophime, Luca Berti, Abdoulaye Samaké, Céline Van Landeghem, et al. « Feelpp/feelpp: Feel++ Release V111 Preview.10 ». Zenodo, 15 juillet 2024. https://doi.org/10.5281/zenodo.12742155.
-* [[C]] Thomas Saigre, Vincent Chabannes, Christophe Prud'homme, Marcela Szopos. A coupled model of heat transfer and fluid flow in the human eye. (2024). _In preparation_.
+* [[Ribes17]] Alejandro Ribes, Adrien Bruneton, Anthony Geay. SALOME: an Open-Source simulation platform integrating ParaView. (2017) https://doi.org/10.13140/RG.2.2.12107.08485.
+* [[Prudhomme24]] Christophe Prud'homme, Vincent Chabannes, Thomas Saigre, Christophe Trophime, Luca Berti, Abdoulaye Samaké, Céline Van Landeghem, et al. « Feelpp/feelpp: Feel++ Release V111 Preview.10 ». Zenodo, 15 juillet 2024. https://doi.org/10.5281/zenodo.12742155.
+* [[Sala24]]  Sala L, Prud'homme C, Guidoboni G, Szopos M, Harris A. The ocular mathematical virtual simulator: A validated multiscale model for hemodynamics and biomechanics in the human eye. Int J Numer Meth Biomed Engng. 2024; 40(2):e3791. https://doi.org/10.1002/cnm.3791.
+* [[Saigre24]] Thomas Saigre, Vincent Chabannes, Christophe Prud'homme, Marcela Szopos. A coupled model of heat transfer and fluid flow in the human eye. (2024). _In preparation_.
