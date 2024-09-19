@@ -41,7 +41,7 @@ To generate the uniform family mesh `M.`, run the following command:
 
 [source, bash]
 ----
-python3 generate_familly.py
+python3 generate_family.py
 ----
 
 It will generate the meshes `M0`, `M1`, `M2`, `M3`, `M4` and `M5` of various refinement levels.
