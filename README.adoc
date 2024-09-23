@@ -1,4 +1,4 @@
-= Generation of the geometry and the meshes of the 3D model of the human eyeball
+= A 3D geometrical model and meshing procedures for the human eyeball
 :hide-uri-scheme:
 
 This document describes the procedure to generate the geometry and the meshes of the 3D model of the human eyeball.
