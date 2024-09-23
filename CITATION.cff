@@ -3,7 +3,7 @@ message: "If you use this dataset, please cite it as below."
 authors:
   - family-names: "Chabannes"
     given-names: "Vincent"
-    orcid: https://orcid.org/0009-0005-3602-3524  
+    orcid: https://orcid.org/0009-0005-3602-3524
   - family-names: "Prud'homme"
     given-names: "Christophe"
     orcid: https://orcid.org/0000-0003-2287-2961
@@ -12,17 +12,17 @@ authors:
     orcid:  https://orcid.org/0009-0009-5763-4956
   - family-names: "Lorenzo"
     given-names: "Sala"
-    orcid: https://orcid.org/0000-0002-8878-0616    
+    orcid: https://orcid.org/0000-0002-8878-0616
   - family-names: "Szopos"
     given-names: "Marcela"
-    orcid: https://orcid.org/0000-0002-7300-3267    
+    orcid: https://orcid.org/0000-0002-7300-3267
   - family-names: "Trophime"
     given-names: "Christophe"
-    orcid: https://orcid.org/0000-0002-3147-5821    
+    orcid: https://orcid.org/0000-0002-3147-5821
 title: "A 3D geometrical model and meshing procedures for the human eyeball"
 version: 1.0.0
 identifiers:
   - type: doi
-    value:
+    value: https://zenodo.org/doi/10.5281/zenodo.13829740
 date-released: 2024-09-06
 url: "https://github.com/feelpp/mesh.eye"
