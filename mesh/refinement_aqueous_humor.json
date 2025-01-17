@@ -16,7 +16,7 @@
         "heat": {
             "DistanceToRange": {
                 "wall": {
-                    "markers": ["AqueousHumor_Lens", "AqueousHumor_Cornea", "AqueousHumor_Iris"],
+                    "markers": ["AqueousHumor_Lens", "AqueousHumor_Cornea", "AqueousHumor_Iris", "AqueousHumor_VitreousHumor"],
                     "normalization": "min_max"
                 }
             },

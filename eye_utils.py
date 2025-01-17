@@ -247,3 +247,18 @@ def build_vitreous_humor(geompy, lens, aqueousHumor, retina, iris, choroid):
     VitreousHumor = geompy.MakeSolid([ShellNewVitreousHumor])
 
     return VitreousHumor
+
+def fix_posterior_chamber(geompy, aqueousHumor, vitreousHumor, x_limit=-8.6):
+    OX = geompy.MakeVectorDXDYDZ(1, 0, 0)
+    Vertex_1 = geompy.MakeVertex(x_limit, 0, 0)
+    Plane_1 = geompy.MakePlane(Vertex_1, OX, 50)
+
+    Partition_1 = geompy.MakePartition([aqueousHumor], [Plane_1], [], [], geompy.ShapeType["SOLID"], 0, [], 0)
+    [AH_good, AH_bad] = geompy.ExtractShapes(Partition_1, geompy.ShapeType["SOLID"], True)
+
+    geompy.addToStudy(AH_good, "good")
+    geompy.addToStudy(AH_bad, "bad")
+
+    VH_good = geompy.MakeFuseList([vitreousHumor, AH_bad], True, False)
+
+    return AH_good, VH_good

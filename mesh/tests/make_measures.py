@@ -12,12 +12,15 @@ argv = ["measures"]
 argv.append("--mesh.scale")
 argv.append("1e-3")
 
+current_dir = os.getcwd()
+
 app = fppc.Environment(argv, config=fppc.localRepository("measures"))
 
 
 def load_mesh(name):
     dir_suffix = ["", "r"][use_remeshed]
-    mesh_path = os.path.join(f"M{dir_suffix}", name, fppc.Environment.expand(f"Eye_Mesh3D_p$np.json"))
+    mesh_path = os.path.join(current_dir, f"M{dir_suffix}", name, fppc.Environment.expand(f"Eye_Mesh3D_p$np.json"))
+    # print(f"load mesh {mesh_path}")
     m = fppc.mesh(dim=3, realdim=3)
     mesh = fppc.load(m, mesh_path, verbose=False)
 
