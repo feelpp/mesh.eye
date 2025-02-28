@@ -13,4 +13,4 @@ mpirun -np ${NP} feelpp_toolbox_heat --config-file refinement_aqueous_humor.cfg 
 mv ${PWD}/feelppdb/mesh/np_${NP}/meshes/tmp/mesh_o.h5 ${PWD}/${MESH_R_NAME}.h5
 mv ${PWD}/feelppdb/mesh/np_${NP}/meshes/tmp/mesh_o.json ${PWD}/${MESH_R_NAME}.json
 
-sed -i 's/mesh_o/${MESH_R_NAME}/g' ${MESH_R_NAME}.json
+sed -i "s/mesh_o/${MESH_R_NAME}/g" ${MESH_R_NAME}.json

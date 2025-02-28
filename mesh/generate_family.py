@@ -28,8 +28,8 @@ if __name__ == "__main__":
 
     mesh = load_mesh(mesh_path, dim=3)
 
-    for idx, r in enumerate(["10", "5"]):#, "1", "0.5", "0.25", "0.125"]):
-        mesh_r = remesh(mesh, r)
+    for idx, r in enumerate(["10", "5", "1", "0.5", "0.25", "0.125"]):
+        mesh_r = remesh(mesh, f"h*{r}:h")
 
         if fppc.Environment.isMasterRank():
             print(Fore.BLUE, f"{mesh_family}{idx} with metric {r}", Style.RESET_ALL)
@@ -39,6 +39,9 @@ if __name__ == "__main__":
             print(f"       {mesh_r.numGlobalElements()} elements")
 
         export_dir = os.path.join(cwd, mesh_family, f"M{idx}")
+
         if fppc.Environment.isMasterRank() and not os.path.exists(export_dir):
             os.makedirs(export_dir)
+
         mesh_r.saveHDF5(os.path.join(export_dir, "Eye_Mesh3D.json"))
+        # mesh_r.saveGMSH(os.path.join(export_dir, "Eye_Mesh3D.msh"))

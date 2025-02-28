@@ -2,6 +2,7 @@ __pycache__/
 Eye.step
 *.med
 *.msh
+*.mesh
 *.h5
 **/Eye_Mesh3D*.json
 **/feelppdb/**

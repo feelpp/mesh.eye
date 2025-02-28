@@ -34,3 +34,13 @@ jobs:
         run: |
           cd mesh
           bash tests/test_laplacian.sh
+
+      - name: Mesh adaptation around AC and PC
+        run: |
+          cd mesh
+          bash generate_mesh_Mr.sh
+
+      - name: Test on volumes
+        run: |
+          cd mesh
+          python3 tests/test_measures.py only_main

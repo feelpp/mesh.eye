@@ -12,5 +12,5 @@ do
 
     feelpp_mesh_partitioner --ifile ${PWD}/M/${MESH_INDEX}/Eye_Mesh3D.json \
         --odir ${PWD}/M/${MESH_INDEX} \
-        --part 1 2 4 8 12 24
+        --part 1 2 4 8 12 24 64 128 256 384 512 640 768
 done
