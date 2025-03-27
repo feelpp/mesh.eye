@@ -157,13 +157,15 @@ print("Done")
 
 # build aqueousHumor
 print("Building aqueous humor...", end=' ')
-Aqueous_humor = build_aqueous_humor(geompy, Cornea, Sclera, Iris, Lens, Ligament, Vitreous_humor0)
+Aqueous_humor_almost_there = build_aqueous_humor(geompy, Cornea, Sclera, Iris, Lens, Ligament, Vitreous_humor0)
 print("Done")
 
 # build vitreous humor
 print("Building vitreous humor...", end=' ')
-Vitreous_humor = build_vitreous_humor(geompy, Lens, Aqueous_humor, Retina, Iris, Choroid)
+Vitreous_humor_almost_there = build_vitreous_humor(geompy, Lens, Aqueous_humor_almost_there, Retina, Iris, Choroid)
 print("Done")
+
+Aqueous_humor, Vitreous_humor = fix_posterior_chamber(geompy, Aqueous_humor_almost_there, Vitreous_humor_almost_there)
 
 
 eye0 = geompy.MakePartition( [Cornea, Aqueous_humor, Iris, Lens, Vitreous_humor, Sclera, Choroid, Retina, Lamina, OpticNerve], [], [], [], geompy.ShapeType["SOLID"], 0, [], 0)

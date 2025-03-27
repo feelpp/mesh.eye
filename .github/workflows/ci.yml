@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: self-ubuntu-24.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Construct eye STP and generate meshes
+        run: |
+          salome -t construct-eye-STP.py
+          salome -t eye.py
+
+      - name: Convert mesh to Gmsh format
+        run: gmsh -0 mesh/Eye_Mesh3D.med -o mesh/Eye_Mesh3D.msh
+
+      - name: Tests load mesh and run heat toolbox
+        run: |
+          cd mesh
+          python3 tests/test_mesh.py
+          mpirun -np 4 python3 tests/test_mesh.py
+
+      - name: Test with quickstart laplacian
+        run: |
+          cd mesh
+          bash tests/test_laplacian.sh
+
+      - name: Mesh adaptation around AC and PC
+        run: |
+          cd mesh
+          bash generate_mesh_Mr.sh
+
+      - name: Test on volumes
+        run: |
+          cd mesh
+          python3 tests/test_measures.py only_main

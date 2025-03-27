@@ -5,7 +5,7 @@ set -e
 
 PWD=$(pwd)
 
-for MESH_INDEX in M0 M1 M2 M3 M4 M5
+for MESH_INDEX in M0 M1 M2 M3 M4
 do
     echo "Partitioning mesh ${MESH_INDEX}..."
     echo "PWD: ${PWD}"

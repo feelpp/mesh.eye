@@ -1,6 +1,7 @@
 import feelpp.core as fppc
 from feelpp.core.integrate  import integrate
 import sys, os
+from .make_measures import load_mesh, compute_eye_volume, compute_domain_volume
 
 
 if "Mr" in sys.argv:
@@ -12,16 +13,11 @@ argv = ["measures"]
 argv.append("--mesh.scale")
 argv.append("1e-3")
 
+current_dir = os.getcwd()
+
 app = fppc.Environment(argv, config=fppc.localRepository("measures"))
 
 
-def load_mesh(name):
-    dir_suffix = ["", "r"][use_remeshed]
-    mesh_path = os.path.join(f"M{dir_suffix}", name, fppc.Environment.expand(f"Eye_Mesh3D_p$np.json"))
-    m = fppc.mesh(dim=3, realdim=3)
-    mesh = fppc.load(m, mesh_path, verbose=False)
-
-    return mesh
 
 def display_mesh_information(mesh):
     nelt = mesh.numGlobalElements()
@@ -37,14 +33,6 @@ def display_mesh_information(mesh):
 
     return nelt, hmin, hmax, havg
 
-def compute_eye_volume(mesh):
-    v = integrate(range=fppc.elements(mesh), expr="1")[0]
-    return v
-
-def compute_domain_volume(mesh, domain):
-    elts = fppc.markedelements(mesh, domain)
-    v = integrate(range=elts, expr="1")[0]
-    return v
 
 Nelt = []
 l = []
@@ -53,7 +41,7 @@ infos = []
 
 
 for m in ["M0", "M1", "M2", "M3", "M4", "M5"]:
-    mesh = load_mesh(m)
+    mesh = load_mesh(m, current_dir, use_remeshed=use_remeshed)
 
     if True:
 
