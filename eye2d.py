@@ -21,9 +21,13 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("--hsize_max", help="max size of the h of the computational mesh for the eye [default=1.0]", type=float, default=1.0)
 parser.add_argument("--hsize_min", help="max size of the h of the computational mesh for the lamina [default=0.05]", type=float, default=0.05)
+parser.add_argument("--add-syringe", default=False, type=bool, help="add the syringe")
 parser.add_argument("--mesh", help="activate mesh generation", action="store_true")
 args = parser.parse_args()
 
+add_syringe = args.add_syringe
+if add_syringe:
+    print("Syringe is added")
 
 
 ###
@@ -64,14 +68,27 @@ Lamina2Plan = ExtractedFaces[309]
 Lamina1Plan = ExtractedFaces[323]
 OpticNervePlan = ExtractedFaces[328]
 
+if add_syringe:
+    Bloc = geompy.MakeFaceHW(0.25, 0.1, 1)
+    syringe = geompy.MakeTranslation(Bloc, -10.5, -3, 0)
 
-EyePlan = geompy.MakePartition([CorneaPlan, Iris1Plan, Iris2Plan, LensPlan, AqueousHumorPlan, Choroid1Plan, Choroid2Plan, RetinaPlan, VitreousHumorPlan, Lamina1Plan, Lamina2Plan, OpticNervePlan, Sclera1Plan, Sclera2Plan], [], [], [], geompy.ShapeType["FACE"], 0, [], 0)
-[Cornea, AqueousHumor, Iris2, Lens, Iris1, Sclera2, VitreousHumor, Choroid2, Sclera1, Retina, Choroid1, Lamina2, Lamina1, OpticNerve] = geompy.ExtractShapes(EyePlan, geompy.ShapeType["FACE"], True)
-re_ex = geompy.ExtractShapes(EyePlan, geompy.ShapeType["FACE"], True)
+    geompy.addToStudy(syringe, 'Syringe' )
 
-# for i, l in enumerate(re_ex):
-    # geompy.addToStudy(l, f"EyePlan_{i}")
+    AqueousHumor_Cut = geompy.MakeCutList(AqueousHumorPlan, [syringe], True)
 
+    EyePlan = geompy.MakePartition([CorneaPlan, Iris1Plan, Iris2Plan, LensPlan, AqueousHumor_Cut, syringe, Choroid1Plan, Choroid2Plan, RetinaPlan, VitreousHumorPlan, Lamina1Plan, Lamina2Plan, OpticNervePlan, Sclera1Plan, Sclera2Plan], [], [], [], geompy.ShapeType["FACE"], 0, [], 0)
+
+    [Cornea, Syringe, AqueousHumor, Iris2, Lens, Iris1, Sclera2, VitreousHumor, Choroid2, Sclera1, Retina, Choroid1, Lamina2, Lamina1, OpticNerve] = geompy.ExtractShapes(EyePlan, geompy.ShapeType["FACE"], True)
+
+    Group_AqueousHumor = geompy.CreateGroup(EyePlan, geompy.ShapeType["FACE"])
+    geompy.UnionList(Group_AqueousHumor, [AqueousHumor, Syringe])
+
+else:
+
+    EyePlan = geompy.MakePartition([CorneaPlan, Iris1Plan, Iris2Plan, LensPlan, AqueousHumorPlan, Choroid1Plan, Choroid2Plan, RetinaPlan, VitreousHumorPlan, Lamina1Plan, Lamina2Plan, OpticNervePlan, Sclera1Plan, Sclera2Plan], [], [], [], geompy.ShapeType["FACE"], 0, [], 0)
+    [Cornea, AqueousHumor, Iris2, Lens, Iris1, Sclera2, VitreousHumor, Choroid2, Sclera1, Retina, Choroid1, Lamina2, Lamina1, OpticNerve] = geompy.ExtractShapes(EyePlan, geompy.ShapeType["FACE"], True)
+
+    Group_AqueousHumor = AqueousHumor
 
 
 Group_Iris = geompy.CreateGroup(EyePlan, geompy.ShapeType["FACE"])
@@ -93,7 +110,7 @@ Group_Sclera.SetColor(SALOMEDS.Color(1,1,1))
 Group_Choroid.SetColor(SALOMEDS.Color(1,0.0784,0.5764))
 Group_Lamina.SetColor(SALOMEDS.Color(0,1,0))
 Cornea.SetColor(SALOMEDS.Color(1,1,0))
-AqueousHumor.SetColor(SALOMEDS.Color(0.5019,0.0941,0.0941))
+Group_AqueousHumor.SetColor(SALOMEDS.Color(0.5019,0.0941,0.0941))
 Lens.SetColor(SALOMEDS.Color(0,0.666667,0))
 
 
@@ -103,7 +120,7 @@ geompy.addToStudy( OY, 'OY' )
 geompy.addToStudy( OZ, 'OZ' )
 geompy.addToStudy( EyePlan, 'EyePlan' )
 geompy.addToStudyInFather( EyePlan, Cornea, 'Cornea' )
-geompy.addToStudyInFather( EyePlan, AqueousHumor, 'AqueousHumor' )
+geompy.addToStudyInFather( EyePlan, Group_AqueousHumor, 'AqueousHumor' )
 geompy.addToStudyInFather( EyePlan, Lens, 'Lens' )
 geompy.addToStudyInFather( EyePlan, VitreousHumor, 'VitreousHumor' )
 geompy.addToStudyInFather( EyePlan, Retina, 'Retina' )
@@ -114,11 +131,8 @@ geompy.addToStudyInFather( EyePlan, Group_Choroid, 'Choroid' )
 geompy.addToStudyInFather( EyePlan, Group_Lamina, 'Lamina' )
 
 
-# if salome.sg.hasDesktop():
-#   salome.sg.updateObjBrowser()
 
-
-Faces = [Cornea, AqueousHumor, Group_Iris, Lens, VitreousHumor, Group_Sclera, Group_Choroid, Retina, Group_Lamina, OpticNerve]
+Faces = [Cornea, Group_AqueousHumor, Group_Iris, Lens, VitreousHumor, Group_Sclera, Group_Choroid, Retina, Group_Lamina, OpticNerve]
 Faces = sorted(Faces, key=lambda solid:solid.GetName() )
 
 for f in Faces:
