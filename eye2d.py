@@ -21,7 +21,7 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("--hsize_max", help="max size of the h of the computational mesh for the eye [default=1.0]", type=float, default=1.0)
 parser.add_argument("--hsize_min", help="max size of the h of the computational mesh for the lamina [default=0.05]", type=float, default=0.05)
-parser.add_argument("--add-syringe", default=False, type=bool, help="add the syringe")
+parser.add_argument("--add-syringe", default=True, type=bool, help="add the syringe")
 parser.add_argument("--mesh", help="activate mesh generation", action="store_true")
 args = parser.parse_args()
 
@@ -206,6 +206,12 @@ for i, face in enumerate(Faces):
             edges = geompy.CreateGroup(face, geompy.ShapeType["EDGE"], f"Lamina_{BC}")
             geompy.UnionList(edges, [Edges[i] for i in dict_Lamina[BC]])
             Others_interfaces.append(edges)
+
+    if Name in "AqueousHumor":
+        Edges = geompy.ExtractShapes(face, geompy.ShapeType["EDGE"], True)
+        Syringe_edge = geompy.CreateGroup(face, geompy.ShapeType["EDGE"], "Syringe_In")
+        geompy.UnionList(Syringe_edge, [Edges[3]])
+        Others_interfaces.append(Syringe_edge)
 
     print("ok")
 
