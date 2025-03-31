@@ -162,7 +162,15 @@ for i, face in enumerate(Faces):
                 d = len(wires)
                 if d > 0:
                     print(f"    Interface for {Name1} / {Name2} : {d}")
-                    checksum += d
+
+                    if (Name1 == "AqueousHumor" and Name2 == "Iris") or (Name2 == "AqueousHumor" and Name1 == "Iris"):
+
+                        assert len(wires) == 14
+                        wires = [wires[0]] + wires[2:12] + [wires[13]]
+                        print("    AqueousHumor/Iris : ", len(wires))
+
+                    checksum += len(wires)
+
 
                     interfaceName = f"{Name2}_{Name1}" if Name1 > Name2 else f"{Name1}_{Name2}"
                     Interface_dict[(Name1, Name2)] = geompy.CreateGroup(face, geompy.ShapeType["EDGE"], interfaceName)
@@ -181,7 +189,8 @@ Others = {
     "Cornea" : [0, 1],
     "OpticNerve" : [7, 8, 9],
     "Sclera" : [5, 7, 10, 12, 15, 16, 24, 25],
-    "Pia" : [2, 6, 5, 7, 8]
+    "Pia" : [2, 6, 5, 7, 8],
+    # "AqueousHumor" : [18, 27],
 }
 
 for i, face in enumerate(Faces):
@@ -212,6 +221,16 @@ for i, face in enumerate(Faces):
         Syringe_edge = geompy.CreateGroup(face, geompy.ShapeType["EDGE"], "Syringe_In")
         geompy.UnionList(Syringe_edge, [Edges[2]])
         Others_interfaces.append(Syringe_edge)
+
+    if Name in "AqueousHumor":
+        Edges = geompy.ExtractShapes(face, geompy.ShapeType["EDGE"], True)
+        # AH_Out_edge = geompy.CreateGroup(face, geompy.ShapeType["EDGE"], "AqueousHumor_Out")
+        # geompy.UnionList(AH_Out_edge, [Edges[10], Edges[24]])
+        # Others_interfaces.append(AH_Out_edge)
+
+        AH_In_edge = geompy.CreateGroup(face, geompy.ShapeType["EDGE"], "AqueousHumor_In")
+        geompy.UnionList(AH_In_edge, [Edges[18], Edges[27]])
+        Others_interfaces.append(AH_In_edge)
 
     print("ok")
 
@@ -261,7 +280,7 @@ for interface in Interfaces:
                 Done.append(Name)
 
 NETGEN_2D_Parameters = NETGEN_2D_1.Parameters()
-NETGEN_2D_Parameters.SetMaxSize( 0.1 )
+NETGEN_2D_Parameters.SetMaxSize( 1 )
 
 
 isDone = Eye_Mesh.Compute()
@@ -269,4 +288,4 @@ assert isDone
 
 print(Eye_Mesh.Dump())
 
-Eye_Mesh.ExportMED( f"TEST2d.med", 0, SMESH.MED_V2_2, 1, None ,1)
+Eye_Mesh.ExportMED( f"EyeMesh_2d.med", 0, SMESH.MED_V2_2, 1, None ,1)
