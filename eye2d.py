@@ -80,15 +80,11 @@ if add_syringe:
 
     [Cornea, Syringe, AqueousHumor, Iris2, Lens, Iris1, Sclera2, VitreousHumor, Choroid2, Sclera1, Retina, Choroid1, Lamina2, Lamina1, OpticNerve] = geompy.ExtractShapes(EyePlan, geompy.ShapeType["FACE"], True)
 
-    Group_AqueousHumor = geompy.CreateGroup(EyePlan, geompy.ShapeType["FACE"])
-    geompy.UnionList(Group_AqueousHumor, [AqueousHumor, Syringe])
 
 else:
 
     EyePlan = geompy.MakePartition([CorneaPlan, Iris1Plan, Iris2Plan, LensPlan, AqueousHumorPlan, Choroid1Plan, Choroid2Plan, RetinaPlan, VitreousHumorPlan, Lamina1Plan, Lamina2Plan, OpticNervePlan, Sclera1Plan, Sclera2Plan], [], [], [], geompy.ShapeType["FACE"], 0, [], 0)
     [Cornea, AqueousHumor, Iris2, Lens, Iris1, Sclera2, VitreousHumor, Choroid2, Sclera1, Retina, Choroid1, Lamina2, Lamina1, OpticNerve] = geompy.ExtractShapes(EyePlan, geompy.ShapeType["FACE"], True)
-
-    Group_AqueousHumor = AqueousHumor
 
 
 Group_Iris = geompy.CreateGroup(EyePlan, geompy.ShapeType["FACE"])
@@ -110,7 +106,9 @@ Group_Sclera.SetColor(SALOMEDS.Color(1,1,1))
 Group_Choroid.SetColor(SALOMEDS.Color(1,0.0784,0.5764))
 Group_Lamina.SetColor(SALOMEDS.Color(0,1,0))
 Cornea.SetColor(SALOMEDS.Color(1,1,0))
-Group_AqueousHumor.SetColor(SALOMEDS.Color(0.5019,0.0941,0.0941))
+AqueousHumor.SetColor(SALOMEDS.Color(0.5019,0.0941,0.0941))
+if add_syringe:
+    Syringe.SetColor(SALOMEDS.Color(0.5019,0.0941,0.0941))
 Lens.SetColor(SALOMEDS.Color(0,0.666667,0))
 
 
@@ -120,7 +118,9 @@ geompy.addToStudy( OY, 'OY' )
 geompy.addToStudy( OZ, 'OZ' )
 geompy.addToStudy( EyePlan, 'EyePlan' )
 geompy.addToStudyInFather( EyePlan, Cornea, 'Cornea' )
-geompy.addToStudyInFather( EyePlan, Group_AqueousHumor, 'AqueousHumor' )
+geompy.addToStudyInFather( EyePlan, AqueousHumor, 'AqueousHumor' )
+if add_syringe:
+    geompy.addToStudyInFather( EyePlan, Syringe, 'Syringe' )
 geompy.addToStudyInFather( EyePlan, Lens, 'Lens' )
 geompy.addToStudyInFather( EyePlan, VitreousHumor, 'VitreousHumor' )
 geompy.addToStudyInFather( EyePlan, Retina, 'Retina' )
@@ -132,7 +132,7 @@ geompy.addToStudyInFather( EyePlan, Group_Lamina, 'Lamina' )
 
 
 
-Faces = [Cornea, Group_AqueousHumor, Group_Iris, Lens, VitreousHumor, Group_Sclera, Group_Choroid, Retina, Group_Lamina, OpticNerve]
+Faces = [Cornea, AqueousHumor, Syringe, Group_Iris, Lens, VitreousHumor, Group_Sclera, Group_Choroid, Retina, Group_Lamina, OpticNerve]
 Faces = sorted(Faces, key=lambda solid:solid.GetName() )
 
 for f in Faces:
@@ -207,10 +207,10 @@ for i, face in enumerate(Faces):
             geompy.UnionList(edges, [Edges[i] for i in dict_Lamina[BC]])
             Others_interfaces.append(edges)
 
-    if Name in "AqueousHumor":
+    if Name in "Syringe":
         Edges = geompy.ExtractShapes(face, geompy.ShapeType["EDGE"], True)
         Syringe_edge = geompy.CreateGroup(face, geompy.ShapeType["EDGE"], "Syringe_In")
-        geompy.UnionList(Syringe_edge, [Edges[3]])
+        geompy.UnionList(Syringe_edge, [Edges[2]])
         Others_interfaces.append(Syringe_edge)
 
     print("ok")
@@ -226,12 +226,7 @@ smesh = smeshBuilder.New()
 Eye_Mesh = smesh.Mesh(EyePlan)
 NETGEN_2D_1 = Eye_Mesh.Triangle(algo=smeshBuilder.NETGEN_1D2D)
 
-
-
 smesh.SetName(Eye_Mesh.GetMesh(), 'Eye_Mesh')
-
-
-
 
 # Set markers
 Vitreous_humor_1 = Eye_Mesh.GroupOnGeom(VitreousHumor, 'VitreousHumor', SMESH.FACE)
@@ -244,6 +239,8 @@ Lamina_1 = Eye_Mesh.GroupOnGeom(Group_Lamina, 'Lamina', SMESH.FACE)
 OpticNerve_1 = Eye_Mesh.GroupOnGeom(OpticNerve, 'OpticNerve', SMESH.FACE)
 Cornea_1 = Eye_Mesh.GroupOnGeom(Cornea, 'Cornea', SMESH.FACE)
 Sclera_1 = Eye_Mesh.GroupOnGeom(Group_Sclera, 'Sclera', SMESH.FACE)
+if add_syringe:
+    Syringe_1 = Eye_Mesh.GroupOnGeom(Syringe, 'Syringe', SMESH.FACE)
 
 
 Done = []
@@ -264,8 +261,8 @@ for interface in Interfaces:
                 Done.append(Name)
 
 NETGEN_2D_Parameters = NETGEN_2D_1.Parameters()
-# NETGEN_2D_Parameters.SetMaxSize( hsize_max )
-# NETGEN_2D_Parameters.SetMinSize( hsize_min )
+NETGEN_2D_Parameters.SetMaxSize( 0.1 )
+
 
 isDone = Eye_Mesh.Compute()
 assert isDone
