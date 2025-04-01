@@ -218,7 +218,7 @@ for i, face in enumerate(Faces):
 
     if Name in "Syringe":
         Edges = geompy.ExtractShapes(face, geompy.ShapeType["EDGE"], True)
-        Syringe_edge = geompy.CreateGroup(face, geompy.ShapeType["EDGE"], "Syringe_In")
+        Syringe_edge = geompy.CreateGroup(face, geompy.ShapeType["EDGE"], "BC_Injection")
         geompy.UnionList(Syringe_edge, [Edges[2]])
         Others_interfaces.append(Syringe_edge)
 
