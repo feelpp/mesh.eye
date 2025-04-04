@@ -141,8 +141,33 @@ The markers of all the meshes are identical.
 * The volume markers are: `"Cornea"`, `"Sclera"`, `"AqueousHumor"`, `"Lens"`, `"VitreousHumor"`, `"Iris"`, `"Lamina"`, `"Choroid"`, `"Retina"`, `"OpticNerve"`.
 * The interfaces markers are defined when two volumes are in contact, and follow the convention `"Volume1_Volume2"`, where `"Volume1"` and `"Volume2"` are in lexicographic order. For example, the interface between the `"Cornea"` and the `"AqueousHumor"` is `"AqueousHumor_Cornea"`.
 * The is one exception to the previous rule: the boudary surfaces around the lamina crobrosa are names `"Lamina_In"`, `"Lamina_Out"`, `Lamina_Lateral"` and `"Lamina_Hole"`.
-* The external surfaces are: `"BC_Cornea"`, `"BC_Sclera"` and "`BC_OpticNerve`".
+* The external surfaces are: `"BC_Cornea"`, `"BC_Sclera"` and `"BC_OpticNerve"`.
 
+
+
+== 2D extraction
+
+The mesh can be extracted in 2D, making a vertical cut of the eyeball, using the command:
+
+[source, bash]
+----
+python3 eye2d.py [--add-syringe]
+----
+
+The `--add-syringe` (which is by default `True`) adds a small domain that represents the syringe used to inject cell in the eye in the context of cell sedimentation therapy.
+Two 2D meshes are generated:
+
+- `EyeMesh_2d.med`
+- `EyeMesh_AH.med` with the sole domain of the aqueous humor.
+
+These MED meshes can be converted to GMSH format, as above.
+
+In the case `--add-syringe` is set to `True`, a marker `Syringe` is added to the mesh, wich is a small rectangular domain.
+A marker `BC_Injection` is also added to represent the boundary of the syringe where the injection is performed.
+
+
+.Domain of injection.
+image::doc/eye_ah.svg[]
 
 
 
