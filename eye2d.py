@@ -69,8 +69,8 @@ Lamina1Plan = ExtractedFaces[323]
 OpticNervePlan = ExtractedFaces[328]
 
 if add_syringe:
-    Bloc = geompy.MakeFaceHW(0.25, 0.1, 1)
-    syringe = geompy.MakeTranslation(Bloc, -10.5, -3, 0)
+    Bloc = geompy.MakeFaceHW(0.127, 0.05, 1)
+    syringe = geompy.MakeTranslation(Bloc, -10.5, -2.5, 0)
 
     geompy.addToStudy(syringe, 'Syringe' )
 
@@ -301,11 +301,11 @@ Eye_AH = geompy.MakePartition([AqueousHumorPlan, syringe], [], [], [], geompy.Sh
 [SyringeAH, AqueousHumorAH] = geompy.ExtractShapes(Eye_AH, geompy.ShapeType["FACE"], True)
 
 Edges_AqueousHumorAH = geompy.ExtractShapes(AqueousHumorAH, geompy.ShapeType["EDGE"], True)
-for i, edge in enumerate(Edges_AqueousHumorAH):
-    geompy.addToStudy(edge, f"Edge_AqueousHumorAH_{i}")
+# for i, edge in enumerate(Edges_AqueousHumorAH):
+#     geompy.addToStudy(edge, f"Edge_AqueousHumorAH_{i}")
 Edges_SyringeAH = geompy.ExtractShapes(SyringeAH, geompy.ShapeType["EDGE"], True)
-for i, edge in enumerate(Edges_SyringeAH):
-    geompy.addToStudy(edge, f"Edge_SyringeAH_{i}")
+# for i, edge in enumerate(Edges_SyringeAH):
+    # geompy.addToStudy(edge, f"Edge_SyringeAH_{i}")
 
 BC_Injection_Edges = [Edges_SyringeAH[2]]
 AqueousHumor_In_Edges = [Edges_AqueousHumorAH[18], Edges_AqueousHumorAH[27]]
@@ -340,9 +340,11 @@ for name, edges in zip(Names, [AqueousHumor_In_Edges, AqueousHumor_Cornea_Edges,
 
 
 NETGEN_2D_Parameters_AH = NETGEN_2D_1_AH.Parameters()
-NETGEN_2D_Parameters_AH.SetMaxSize( 0.03 )
+NETGEN_2D_Parameters_AH.SetMaxSize( 0.06 )
 
 isDone = Eye_Mesh_AH.Compute()
 assert isDone
+
+print(Eye_Mesh_AH.Dump())
 
 Eye_Mesh_AH.ExportMED( f"EyeMesh_AH.med", 0, SMESH.MED_V2_2, 1, None ,1)
