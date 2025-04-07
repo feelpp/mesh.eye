@@ -38,11 +38,16 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("--hsize_eye", help="max size of the h of the computational mesh for the eye [default=1.0]", type=float, default=1.0)
 parser.add_argument("--hsize_lamina", help="max size of the h of the computational mesh for the lamina [default=0.05]", type=float, default=0.05)
+parser.add_argument("--add-syringe", help="add the syringe", default=False, type=bool)
 parser.add_argument("--mesh", help="activate mesh generation", action="store_true")
 args = parser.parse_args()
 
 hsize_eye = args.hsize_eye
 hsize_lamina = args.hsize_lamina
+
+add_syringe = args.add_syringe
+if add_syringe:
+    print("Syringe added")
 
 
 
@@ -73,7 +78,23 @@ geompy.addToStudy( OZ, 'OZ' )
 
 
 Eye = geompy.ImportSTEP("Eye.step", True)
-[Cornea, AqueousHumor, Iris, Lens, VitreousHumor, Sclera, Choroid, Retina, Lamina, OpticNerve] = geompy.ExtractShapes(Eye, geompy.ShapeType["SOLID"], True)
+[Cornea0, AqueousHumor0, Iris0, Lens0, VitreousHumor0, Sclera0, Choroid0, Retina0, Lamina0, OpticNerve0] = geompy.ExtractShapes(Eye, geompy.ShapeType["SOLID"], True)
+
+if add_syringe:
+    Cylinder_1 = geompy.MakeCylinder(O, OY, 0.127, 0.05)
+    syringe = geompy.MakeTranslation(Cylinder_1, -11, -2.5, 0)
+
+    geompy.addToStudy( syringe, 'Syringe' )
+
+    AqueousHumor_Cut = geompy.MakeCutList(AqueousHumor0, [syringe], True)
+    New_Eye = geompy.MakePartition([Cornea0, AqueousHumor_Cut, Iris0, Lens0, VitreousHumor0, Sclera0, Choroid0, Retina0, Lamina0, OpticNerve0, syringe], [], [], [], geompy.ShapeType["SOLID"], 0, [], 0, 0)
+
+    [Cornea, Syringe, AqueousHumor, Iris, Lens, VitreousHumor, Sclera, Choroid, Retina, Lamina, OpticNerve] = geompy.ExtractShapes(New_Eye, geompy.ShapeType["SOLID"], True)
+
+else:
+    New_Eye = geompy.MakePartition([Cornea0, AqueousHumor0, Iris0, Lens0, VitreousHumor0, Sclera0, Choroid0, Retina0, Lamina0, OpticNerve0], [], [], [], geompy.ShapeType["SOLID"], 0, [], 0, 0)
+
+    [Cornea, AqueousHumor, Iris, Lens, VitreousHumor, Sclera, Choroid, Retina, Lamina, OpticNerve] = geompy.ExtractShapes(New_Eye, geompy.ShapeType["SOLID"], True)
 
 geompy.addToStudy( Eye, 'Human Eye' )
 geompy.addToStudyInFather( Eye, Cornea, 'Cornea' )
@@ -86,6 +107,9 @@ geompy.addToStudyInFather( Eye, Choroid, 'Choroid' )
 geompy.addToStudyInFather( Eye, Retina, 'Retina' )
 geompy.addToStudyInFather( Eye, Lamina, 'Lamina' )
 geompy.addToStudyInFather( Eye, OpticNerve, 'OpticNerve' )
+if add_syringe:
+    geompy.addToStudyInFather( Eye, Syringe, 'Syringe' )
+    Syringe.SetColor(SALOMEDS.Color(0.525490196,0.576470588,0.694117647))
 
 
 AqueousHumor.SetColor(SALOMEDS.Color(0.5019,0.0941,0.0941))
@@ -99,7 +123,12 @@ Retina.SetColor(SALOMEDS.Color(0,0,0))
 Sclera.SetColor(SALOMEDS.Color(1,1,1))
 VitreousHumor.SetColor(SALOMEDS.Color(1,0.6470,0))
 
-Solids = [Cornea, AqueousHumor, Iris, Lens, VitreousHumor, Sclera, Choroid, Retina, Lamina, OpticNerve]
+
+
+if add_syringe:
+    Solids = [Cornea, AqueousHumor, Iris, Lens, VitreousHumor, Sclera, Choroid, Retina, Lamina, OpticNerve, Syringe]
+else:
+    Solids = [Cornea, AqueousHumor, Iris, Lens, VitreousHumor, Sclera, Choroid, Retina, Lamina, OpticNerve]
 Solids = sorted(Solids, key=lambda solid: solid.GetName() )
 
 print("\nSolids = [", end="")
@@ -177,6 +206,13 @@ for i,solid1 in enumerate(Solids):
         geompy.UnionList(Hole_, [Hole])
         Out_ = geompy.CreateGroup(Lamina, geompy.ShapeType["FACE"], "Out")
         geompy.UnionList(Out_, [Out])
+
+    # elif "Syringe" in Name1:
+    #     FSyr = geompy.ExtractShapes(solid1, geompy.ShapeType["FACE"], True)
+
+    #     BC_Inj = geompy.CreateGroup(solid1, geompy.ShapeType["FACE"], "BC_Injection")
+    #     geompy.UnionList(BC_Inj, [FSyr[2]])
+    #     Others.append(BC_Inj)
 
     else:
         print("Nothing to do")
