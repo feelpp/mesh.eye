@@ -288,63 +288,64 @@ assert isDone
 
 print(Eye_Mesh.Dump())
 
-Eye_Mesh.ExportMED( f"EyeMesh_2d.med", 0, SMESH.MED_V2_2, 1, None ,1)
+Eye_Mesh.ExportMED( f"mesh/Eye_Mesh2D.med", 0, SMESH.MED_V2_2, 1, None ,1)
 
 
 
 
 
-######################"
+######################
 # Second mesh
 
-Eye_AH = geompy.MakePartition([AqueousHumorPlan, syringe], [], [], [], geompy.ShapeType["FACE"], 0, [], 0)
-[SyringeAH, AqueousHumorAH] = geompy.ExtractShapes(Eye_AH, geompy.ShapeType["FACE"], True)
-
-Edges_AqueousHumorAH = geompy.ExtractShapes(AqueousHumorAH, geompy.ShapeType["EDGE"], True)
-# for i, edge in enumerate(Edges_AqueousHumorAH):
-#     geompy.addToStudy(edge, f"Edge_AqueousHumorAH_{i}")
-Edges_SyringeAH = geompy.ExtractShapes(SyringeAH, geompy.ShapeType["EDGE"], True)
-# for i, edge in enumerate(Edges_SyringeAH):
-    # geompy.addToStudy(edge, f"Edge_SyringeAH_{i}")
-
-BC_Injection_Edges = [Edges_SyringeAH[2]]
-AqueousHumor_In_Edges = [Edges_AqueousHumorAH[18], Edges_AqueousHumorAH[27]]
-AqueousHumor_Cornea_Edges = [Edges_AqueousHumorAH[0], Edges_AqueousHumorAH[1]]
-AqueousHumor_Iris_Edges = Edges_AqueousHumorAH[6:10] + Edges_AqueousHumorAH[12:16] + [Edges_AqueousHumorAH[19], Edges_AqueousHumorAH[21], Edges_AqueousHumorAH[26], Edges_AqueousHumorAH[28]]
-AqueousHumor_Lens_Edges = [Edges_AqueousHumorAH[11], Edges_AqueousHumorAH[16], Edges_AqueousHumorAH[17], Edges_AqueousHumorAH[20], Edges_AqueousHumorAH[23], Edges_AqueousHumorAH[25]]
-AqueousHumor_Syringe_Edges = [Edges_AqueousHumorAH[2], Edges_AqueousHumorAH[3], Edges_AqueousHumorAH[4], Edges_AqueousHumorAH[5], Edges_AqueousHumorAH[7], Edges_AqueousHumorAH[8], Edges_AqueousHumorAH[9]]
-AqueousHumor_VitreousHumor_Edges = [Edges_AqueousHumorAH[22], Edges_AqueousHumorAH[29]]
-AqueousHumor_Sclera_Edges = [Edges_AqueousHumorAH[10], Edges_AqueousHumorAH[24]]
-
-Eye_Mesh_AH = smesh.Mesh(Eye_AH)
-
-NETGEN_2D_1_AH = Eye_Mesh_AH.Triangle(algo=smeshBuilder.NETGEN_1D2D)
-smesh.SetName(Eye_Mesh_AH.GetMesh(), 'Eye_Mesh_AH')
-
-# Set markers
-Vitreous_humor_1_AH = Eye_Mesh_AH.GroupOnGeom(AqueousHumorAH, 'AqueousHumor', SMESH.FACE)
 if add_syringe:
+
+    Eye_AH = geompy.MakePartition([AqueousHumorPlan, syringe], [], [], [], geompy.ShapeType["FACE"], 0, [], 0)
+    [SyringeAH, AqueousHumorAH] = geompy.ExtractShapes(Eye_AH, geompy.ShapeType["FACE"], True)
+
+    Edges_AqueousHumorAH = geompy.ExtractShapes(AqueousHumorAH, geompy.ShapeType["EDGE"], True)
+    # for i, edge in enumerate(Edges_AqueousHumorAH):
+    #     geompy.addToStudy(edge, f"Edge_AqueousHumorAH_{i}")
+    Edges_SyringeAH = geompy.ExtractShapes(SyringeAH, geompy.ShapeType["EDGE"], True)
+    # for i, edge in enumerate(Edges_SyringeAH):
+        # geompy.addToStudy(edge, f"Edge_SyringeAH_{i}")
+
+    BC_Injection_Edges = [Edges_SyringeAH[2]]
+    AqueousHumor_In_Edges = [Edges_AqueousHumorAH[18], Edges_AqueousHumorAH[27]]
+    AqueousHumor_Cornea_Edges = [Edges_AqueousHumorAH[0], Edges_AqueousHumorAH[1]]
+    AqueousHumor_Iris_Edges = Edges_AqueousHumorAH[6:10] + Edges_AqueousHumorAH[12:16] + [Edges_AqueousHumorAH[19], Edges_AqueousHumorAH[21], Edges_AqueousHumorAH[26], Edges_AqueousHumorAH[28]]
+    AqueousHumor_Lens_Edges = [Edges_AqueousHumorAH[11], Edges_AqueousHumorAH[16], Edges_AqueousHumorAH[17], Edges_AqueousHumorAH[20], Edges_AqueousHumorAH[23], Edges_AqueousHumorAH[25]]
+    AqueousHumor_Syringe_Edges = [Edges_AqueousHumorAH[2], Edges_AqueousHumorAH[3], Edges_AqueousHumorAH[4], Edges_AqueousHumorAH[5], Edges_AqueousHumorAH[7], Edges_AqueousHumorAH[8], Edges_AqueousHumorAH[9]]
+    AqueousHumor_VitreousHumor_Edges = [Edges_AqueousHumorAH[22], Edges_AqueousHumorAH[29]]
+    AqueousHumor_Sclera_Edges = [Edges_AqueousHumorAH[10], Edges_AqueousHumorAH[24]]
+
+    Eye_Mesh_AH = smesh.Mesh(Eye_AH)
+
+    NETGEN_2D_1_AH = Eye_Mesh_AH.Triangle(algo=smeshBuilder.NETGEN_1D2D)
+    smesh.SetName(Eye_Mesh_AH.GetMesh(), 'Eye_Mesh_AH')
+
+    # Set markers
+    Vitreous_humor_1_AH = Eye_Mesh_AH.GroupOnGeom(AqueousHumorAH, 'AqueousHumor', SMESH.FACE)
     Syringe_1_AH = Eye_Mesh_AH.GroupOnGeom(SyringeAH, 'Syringe', SMESH.FACE)
-Done = []
-Names = ["AqueousHumor_In", "AqueousHumor_Cornea", "AqueousHumor_Iris", "AqueousHumor_Lens", "AqueousHumor_Syringe", "AqueousHumor_VitreousHumor", "AqueousHumor_Sclera", "BC_Injection"]
+    Done = []
+    Names = ["AqueousHumor_In", "AqueousHumor_Cornea", "AqueousHumor_Iris", "AqueousHumor_Lens", "AqueousHumor_Syringe", "AqueousHumor_VitreousHumor", "AqueousHumor_Sclera", "BC_Injection"]
 
-for name, edges in zip(Names, [AqueousHumor_In_Edges, AqueousHumor_Cornea_Edges, AqueousHumor_Iris_Edges, AqueousHumor_Lens_Edges, AqueousHumor_Syringe_Edges, AqueousHumor_VitreousHumor_Edges, AqueousHumor_Sclera_Edges, BC_Injection_Edges]):
-    if name not in Done:
-        BC_Group = geompy.CreateGroup(Eye_AH, geompy.ShapeType["EDGE"], name)
-        geompy.UnionList(BC_Group, edges)
-        BC_Group_Mesh = Eye_Mesh_AH.GroupOnGeom(BC_Group, name, SMESH.EDGE)
-        print(name, " added")
-        Done.append(name)
-
-
+    for name, edges in zip(Names, [AqueousHumor_In_Edges, AqueousHumor_Cornea_Edges, AqueousHumor_Iris_Edges, AqueousHumor_Lens_Edges, AqueousHumor_Syringe_Edges, AqueousHumor_VitreousHumor_Edges, AqueousHumor_Sclera_Edges, BC_Injection_Edges]):
+        if name not in Done:
+            BC_Group = geompy.CreateGroup(Eye_AH, geompy.ShapeType["EDGE"], name)
+            geompy.UnionList(BC_Group, edges)
+            BC_Group_Mesh = Eye_Mesh_AH.GroupOnGeom(BC_Group, name, SMESH.EDGE)
+            print(name, " added")
+            Done.append(name)
 
 
-NETGEN_2D_Parameters_AH = NETGEN_2D_1_AH.Parameters()
-NETGEN_2D_Parameters_AH.SetMaxSize( 0.06 )
 
-isDone = Eye_Mesh_AH.Compute()
-assert isDone
 
-print(Eye_Mesh_AH.Dump())
+    NETGEN_2D_Parameters_AH = NETGEN_2D_1_AH.Parameters()
+    NETGEN_2D_Parameters_AH.SetMaxSize( 0.08 )
 
-Eye_Mesh_AH.ExportMED( f"EyeMesh_AH.med", 0, SMESH.MED_V2_2, 1, None ,1)
+    isDone = Eye_Mesh_AH.Compute()
+    assert isDone
+
+    print(Eye_Mesh_AH.Dump())
+
+    Eye_Mesh_AH.ExportMED( f"mesh/Eye_Mesh2D_AH.med", 0, SMESH.MED_V2_2, 1, None, 1)

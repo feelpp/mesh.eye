@@ -38,7 +38,7 @@ import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("--hsize_eye", help="max size of the h of the computational mesh for the eye [default=1.0]", type=float, default=1.0)
 parser.add_argument("--hsize_lamina", help="max size of the h of the computational mesh for the lamina [default=0.05]", type=float, default=0.05)
-parser.add_argument("--add-syringe", help="add the syringe", default=False, type=bool)
+parser.add_argument("--add-syringe", help="add the syringe", default=True, type=bool)
 parser.add_argument("--mesh", help="activate mesh generation", action="store_true")
 args = parser.parse_args()
 
@@ -96,19 +96,19 @@ else:
 
     [Cornea, AqueousHumor, Iris, Lens, VitreousHumor, Sclera, Choroid, Retina, Lamina, OpticNerve] = geompy.ExtractShapes(New_Eye, geompy.ShapeType["SOLID"], True)
 
-geompy.addToStudy( Eye, 'Human Eye' )
-geompy.addToStudyInFather( Eye, Cornea, 'Cornea' )
-geompy.addToStudyInFather( Eye, AqueousHumor, 'AqueousHumor' )
-geompy.addToStudyInFather( Eye, Iris, 'Iris' )
-geompy.addToStudyInFather( Eye, Lens, 'Lens' )
-geompy.addToStudyInFather( Eye, VitreousHumor, 'VitreousHumor' )
-geompy.addToStudyInFather( Eye, Sclera, 'Sclera' )
-geompy.addToStudyInFather( Eye, Choroid, 'Choroid' )
-geompy.addToStudyInFather( Eye, Retina, 'Retina' )
-geompy.addToStudyInFather( Eye, Lamina, 'Lamina' )
-geompy.addToStudyInFather( Eye, OpticNerve, 'OpticNerve' )
+geompy.addToStudy( New_Eye, 'Human Eye' )
+geompy.addToStudyInFather( New_Eye, Cornea, 'Cornea' )
+geompy.addToStudyInFather( New_Eye, AqueousHumor, 'AqueousHumor' )
+geompy.addToStudyInFather( New_Eye, Iris, 'Iris' )
+geompy.addToStudyInFather( New_Eye, Lens, 'Lens' )
+geompy.addToStudyInFather( New_Eye, VitreousHumor, 'VitreousHumor' )
+geompy.addToStudyInFather( New_Eye, Sclera, 'Sclera' )
+geompy.addToStudyInFather( New_Eye, Choroid, 'Choroid' )
+geompy.addToStudyInFather( New_Eye, Retina, 'Retina' )
+geompy.addToStudyInFather( New_Eye, Lamina, 'Lamina' )
+geompy.addToStudyInFather( New_Eye, OpticNerve, 'OpticNerve' )
 if add_syringe:
-    geompy.addToStudyInFather( Eye, Syringe, 'Syringe' )
+    geompy.addToStudyInFather( New_Eye, Syringe, 'Syringe' )
     Syringe.SetColor(SALOMEDS.Color(0.525490196,0.576470588,0.694117647))
 
 
@@ -207,12 +207,12 @@ for i,solid1 in enumerate(Solids):
         Out_ = geompy.CreateGroup(Lamina, geompy.ShapeType["FACE"], "Out")
         geompy.UnionList(Out_, [Out])
 
-    # elif "Syringe" in Name1:
-    #     FSyr = geompy.ExtractShapes(solid1, geompy.ShapeType["FACE"], True)
+    elif "Syringe" in Name1 and add_syringe:
+        FSyr = geompy.ExtractShapes(solid1, geompy.ShapeType["FACE"], True)
 
-    #     BC_Inj = geompy.CreateGroup(solid1, geompy.ShapeType["FACE"], "BC_Injection")
-    #     geompy.UnionList(BC_Inj, [FSyr[2]])
-    #     Others.append(BC_Inj)
+        BC_Inj = geompy.CreateGroup(solid1, geompy.ShapeType["FACE"], "BC_Injection")
+        geompy.UnionList(BC_Inj, [FSyr[2]])
+        Others.append(BC_Inj)
 
     else:
         print("Nothing to do")
@@ -236,7 +236,7 @@ from salome.smesh import smeshBuilder
 
 smesh = smeshBuilder.New()
 
-EyeMesh = smesh.Mesh(Eye)
+EyeMesh = smesh.Mesh(New_Eye)
 EyeMesh.SetName("Eye_Mesh")
 NETGEN_1D_2D_3D = EyeMesh.Tetrahedron(algo=smeshBuilder.NETGEN_1D2D3D)
 print("Attach Mesh to Eye_Mesh")
@@ -252,6 +252,8 @@ Lamina_mesh = EyeMesh.GroupOnGeom(Lamina,'Lamina',SMESH.VOLUME)
 OpticNerve_mesh = EyeMesh.GroupOnGeom(OpticNerve,'OpticNerve',SMESH.VOLUME)
 Cornea_mesh = EyeMesh.GroupOnGeom(Cornea,'Cornea',SMESH.VOLUME)
 Sclera_mesh = EyeMesh.GroupOnGeom(Sclera,'Sclera',SMESH.VOLUME)
+if add_syringe:
+    Syringe_mesh = EyeMesh.GroupOnGeom(Syringe, 'Syringe', SMESH.VOLUME)
 
 
 print("Create Groups from Geometry")
@@ -296,7 +298,7 @@ for interface in Interfaces:
 try:
     isDone = EyeMesh.Compute()
 
-    EyeMesh.ExportMED( "mesh/Eye_Mesh3D.med", 0, SMESH.MED_V2_2, 1, None ,1 )
+    EyeMesh.ExportMED( "mesh/Eye_Mesh3D_test.med", 0, SMESH.MED_V2_2, 1, None ,1 )
 
     print(EyeMesh.Dump())
     print('Mesh built successfully')
@@ -319,3 +321,71 @@ print("***********************************")
 
 if salome.sg.hasDesktop():
     salome.sg.updateObjBrowser()
+
+
+####################################
+# Second mesh
+
+if add_syringe:
+
+    Eye_AH = geompy.MakePartition([AqueousHumor, Syringe], [], [], [], geompy.ShapeType["SOLID"], 0, [], 0, 0)
+    [SyringeAH, AqueousHumorAH] = geompy.ExtractShapes(Eye_AH, geompy.ShapeType["SOLID"], True)
+
+    Faces_AqueousHumorAH = geompy.ExtractShapes(AqueousHumorAH, geompy.ShapeType["FACE"], True)
+    for i, face, in enumerate(Faces_AqueousHumorAH):
+        geompy.addToStudy(face, f"Face_AqueousHumorAH_{i}")
+    Faces_SyringeAH = geompy.ExtractShapes(SyringeAH, geompy.ShapeType["FACE"], True)
+    for i, face, in enumerate(Faces_SyringeAH):
+        geompy.addToStudy(face, f"Face_SyringeAH_{i}")
+
+    BC_Injection_Faces = [Faces_SyringeAH[2]]
+    AqueousHumor_In_Faces = [Faces_AqueousHumorAH[20], Faces_AqueousHumorAH[54]]
+    AqueousHumor_Cornea_Faces = [Faces_AqueousHumorAH[3], Faces_AqueousHumorAH[4]]
+    AqueousHumor_Iris_Faces = [
+        Faces_AqueousHumorAH[7], Faces_AqueousHumorAH[12], Faces_AqueousHumorAH[14], Faces_AqueousHumorAH[48],
+        Faces_AqueousHumorAH[5], Faces_AqueousHumorAH[6], Faces_AqueousHumorAH[8], Faces_AqueousHumorAH[9],
+        Faces_AqueousHumorAH[10], Faces_AqueousHumorAH[29], Faces_AqueousHumorAH[17], Faces_AqueousHumorAH[18],
+        Faces_AqueousHumorAH[19], Faces_AqueousHumorAH[21], Faces_AqueousHumorAH[22], Faces_AqueousHumorAH[23],
+        Faces_AqueousHumorAH[24], Faces_AqueousHumorAH[32], Faces_AqueousHumorAH[33], Faces_AqueousHumorAH[37],
+        Faces_AqueousHumorAH[40], Faces_AqueousHumorAH[44], Faces_AqueousHumorAH[45], Faces_AqueousHumorAH[49],
+        Faces_AqueousHumorAH[50], Faces_AqueousHumorAH[55], Faces_AqueousHumorAH[58], Faces_AqueousHumorAH[59],
+        Faces_AqueousHumorAH[64], Faces_AqueousHumorAH[65], Faces_AqueousHumorAH[66], Faces_AqueousHumorAH[67]
+    ]
+    AqueousHumor_Lens_Faces = [
+        Faces_AqueousHumorAH[11], Faces_AqueousHumorAH[13], Faces_AqueousHumorAH[36], Faces_AqueousHumorAH[38],
+        Faces_AqueousHumorAH[26], Faces_AqueousHumorAH[27], Faces_AqueousHumorAH[28], Faces_AqueousHumorAH[30],
+        Faces_AqueousHumorAH[31], Faces_AqueousHumorAH[34], Faces_AqueousHumorAH[35], Faces_AqueousHumorAH[39],
+        Faces_AqueousHumorAH[41], Faces_AqueousHumorAH[42], Faces_AqueousHumorAH[43], Faces_AqueousHumorAH[46],
+        Faces_AqueousHumorAH[47], Faces_AqueousHumorAH[52], Faces_AqueousHumorAH[53], Faces_AqueousHumorAH[56],
+        Faces_AqueousHumorAH[57], Faces_AqueousHumorAH[60], Faces_AqueousHumorAH[61], Faces_AqueousHumorAH[62], Faces_AqueousHumorAH[63]
+    ]
+    AqueousHumor_Syringe_Faces = [Faces_AqueousHumorAH[0], Faces_AqueousHumorAH[1]]
+    AqueousHumor_VitreousHumor_Faces = [Faces_AqueousHumorAH[51]]
+    AqueousHumor_Sclera_Faces = [Faces_AqueousHumorAH[15], Faces_AqueousHumorAH[16]]
+
+
+    Eye_Mesh_AH = smesh.Mesh(Eye_AH)
+    NETGEN_1D_2D_3D_AH = Eye_Mesh_AH.Tetrahedron(algo=smeshBuilder.NETGEN_1D2D3D)
+    smesh.SetName(Eye_Mesh_AH.GetMesh(), "Eye_Mesh_AH")
+
+    # Set markers
+    Vitreous_humor_1_AH = Eye_Mesh_AH.GroupOnGeom(AqueousHumorAH, 'AqueousHumor', SMESH.VOLUME)
+    Syringe_1_AH = Eye_Mesh_AH.GroupOnGeom(SyringeAH, 'Syringe', SMESH.VOLUME)
+    Done = []
+    Names = ["AqueousHumor_In", "AqueousHumor_Cornea", "AqueousHumor_Iris", "AqueousHumor_Lens", "AqueousHumor_Syringe", "AqueousHumor_VitreousHumor", "AqueousHumor_Sclera", "BC_Injection"]
+
+    for name, faces in zip(Names, [AqueousHumor_In_Faces, AqueousHumor_Cornea_Faces, AqueousHumor_Iris_Faces, AqueousHumor_Lens_Faces, AqueousHumor_Syringe_Faces, AqueousHumor_VitreousHumor_Faces, AqueousHumor_Sclera_Faces, BC_Injection_Faces]):
+        if name not in Done:
+            BC_Group = geompy.CreateGroup(Eye_AH, geompy.ShapeType["FACE"], name)
+            geompy.UnionList(BC_Group, faces)
+            BC_Group_Mesh = Eye_Mesh_AH.GroupOnGeom(BC_Group, name, SMESH.FACE)
+            print("Other inserted :", name)
+            Done.append(name)
+
+    NETGEN_3D_Parameters_AH = NETGEN_1D_2D_3D_AH.Parameters()
+    NETGEN_3D_Parameters_AH.SetMaxSize( 0.1 )
+
+    isDone = Eye_Mesh_AH.Compute()
+    assert isDone, "Failed to compute mesh"
+
+    Eye_Mesh_AH.ExportMED( "mesh/Eye_Mesh3D_AH.med", 0, SMESH.MED_V2_2, 1, None, 1 )
