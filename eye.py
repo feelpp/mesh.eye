@@ -298,7 +298,7 @@ for interface in Interfaces:
 try:
     isDone = EyeMesh.Compute()
 
-    EyeMesh.ExportMED( "mesh/Eye_Mesh3D_test.med", 0, SMESH.MED_V2_2, 1, None ,1 )
+    EyeMesh.ExportMED( "mesh/Eye_Mesh3D.med", 0, SMESH.MED_V2_2, 1, None ,1 )
 
     print(EyeMesh.Dump())
     print('Mesh built successfully')
