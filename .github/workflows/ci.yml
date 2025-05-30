@@ -11,6 +11,8 @@ on:
 jobs:
   build:
     runs-on: self-ubuntu-24.04
+    container:
+      image: shivanandvp/salome:latest
 
     steps:
       - name: Checkout code
