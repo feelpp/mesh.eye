@@ -11,8 +11,8 @@ on:
 jobs:
   build:
     runs-on: self-ubuntu-24.04
-    container:
-      image: shivanandvp/salome:latest
+    # container:
+      # image: shivanandvp/salome:latest
 
     steps:
       - name: Checkout code
@@ -20,8 +20,8 @@ jobs:
 
       - name: Construct eye STP and generate meshes
         run: |
-          salome -t construct-eye-STP.py
-          salome -t eye.py
+          docker run --rm -v .:/home/salome shivanandvp/salome:latest salome -t /home/salome/construct-eye-STP.py
+          docker run --rm -v .:/home/salome shivanandvp/salome:latest salome -t /home/salome/eye.py
 
       - name: Convert mesh to Gmsh format
         run: gmsh -0 mesh/Eye_Mesh3D.med -o mesh/Eye_Mesh3D.msh
