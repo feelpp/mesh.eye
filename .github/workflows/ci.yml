@@ -25,8 +25,7 @@ jobs:
 
       - name: Convert mesh to Gmsh format
         run: |
-          alias gmsh=/data/saigre/gmsh-4.13.1-Linux64/bin/gmsh
-          gmsh -0 mesh/Eye_Mesh3D.med -o mesh/Eye_Mesh3D.msh
+          /data/saigre/gmsh-4.13.1-Linux64/bin/gmsh -0 mesh/Eye_Mesh3D.med -o mesh/Eye_Mesh3D.msh
 
       - name: Tests load mesh and run heat toolbox
         run: |
