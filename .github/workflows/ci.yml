@@ -24,7 +24,9 @@ jobs:
           docker run --rm -v .:/home/salome shivanandvp/salome:latest salome -t /home/salome/eye.py
 
       - name: Convert mesh to Gmsh format
-        run: gmsh -0 mesh/Eye_Mesh3D.med -o mesh/Eye_Mesh3D.msh
+        run: |
+          alias gmsh=/data/saigre/gmsh-4.13.1-Linux64/bin/gmsh
+          gmsh -0 mesh/Eye_Mesh3D.med -o mesh/Eye_Mesh3D.msh
 
       - name: Tests load mesh and run heat toolbox
         run: |
