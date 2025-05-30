@@ -36,7 +36,7 @@ jobs:
       - name: Test with quickstart laplacian
         run: |
           cd mesh
-          bash tests/test_laplacian.sh
+          bash tests/run_laplacian.sh
 
       - name: Mesh adaptation around AC and PC
         run: |
