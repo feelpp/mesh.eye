@@ -23,6 +23,21 @@ jobs:
           docker run --rm -v .:/home/salome shivanandvp/salome:latest salome -t /home/salome/construct-eye-STP.py
           docker run --rm -v .:/home/salome shivanandvp/salome:latest salome -t /home/salome/eye.py
 
+      - name: Cleanup __pycache__ and fix ownership
+        run: |
+          echo "RUNNER_UID=$(id -u)" >> $GITHUB_ENV
+          echo "RUNNER_GID=$(id -g)" >> $GITHUB_ENV          
+      - name: Prune caches & chown to runner
+        run: |
+          docker run --rm \
+            -v "${GITHUB_WORKSPACE}":/home/salome \
+            -e RUNNER_UID="${{ env.RUNNER_UID }}" \
+            -e RUNNER_GID="${{ env.RUNNER_GID }}" \
+            alpine:latest \
+            sh -c "\
+              chown -R \$RUNNER_UID:\$RUNNER_GID /home/salome \
+            "
+
       - name: Convert mesh to Gmsh format
         run: |
           /data/saigre/gmsh-4.13.1-Linux64/bin/gmsh -0 mesh/Eye_Mesh3D.med -o mesh/Eye_Mesh3D.msh
